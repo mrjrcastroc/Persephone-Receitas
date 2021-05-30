@@ -1,5 +1,4 @@
 # Persephone Receitas - Sistema de Gerenciamento de Receitas
-Desenvolvido em Django
 
 Este projeto possibilitou exercer tudo que aprendemos com o dia a dia dos professores em sala de aula e aplicar de forma prática toda parte de desenvolvimento e prototipação de um projeto do seu início ao fim, com a constante evolução atual, focamos em diversas funcionalidades básicas de um site, entregando uma ferramenta leve, rápida e de fácil manuseio, entretanto, temos planejado para o futuro algumas atividades que darão um rumo para que seja possível acompanhar as novas tecnologias e metodologias através do nosso trabalho.
 Com base nisto, criamos uma aplicação web responsiva que possuí por sua vez possuí o mercado em alta, devido à IoT e sua evolução constante que permite atualmente qualquer aparelho eletrônico conectado à internet acessar o nosso site. Sendo assim, desenvolvemos uma aplicação web que permitisse todos os aspirantes em cozinha possuir um livro de receitas virtual.
