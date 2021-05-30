@@ -1,0 +1,27 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+
+{% include 'partials/menu.html' %}
+
+            
+{% load widget_tweaks%}
+
+<div class = "container">
+    <h2> Deletar Categoria de Denuncia</h2> 
+
+    <form method = "POST">
+                {% csrf_token %}
+    <div class="alert alert-danger">Esta ação irá deletar o seu perfil.	<strong>Você tem certeza?!</strong><br/><br/> </div>
+
+
+        <div class="form-group">
+            <br><br><br><br>
+            <button type="submit" class="btn btn-danger">Deletar</button>
+            <a href="{% url 'index' %}"><button type="button" class="btn btn-success">Início</button></a>
+        </div>
+    </form>
+
+</div>
+    {% include 'partials/footer.html' %}
+{% endblock %}

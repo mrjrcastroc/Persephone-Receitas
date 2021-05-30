@@ -1,0 +1,174 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+   
+    {% include 'partials/menu.html' %}
+ 
+{% if user.is_authenticated%}
+   <div class="alert alert-success text-center">Logado como
+  <strong>{{usuario_logado.nome_pessoa}}</strong> </div>
+{% endif %}
+
+<script>
+    function favoritarReceita(x) {
+        if ( x.classList.contains( "fa-heart") ) {
+            x.classList.remove( "fa-heart" );
+            x.classList.add( "fa-heart-o" );
+        }
+        else {
+            x.classList.remove( "fa-heart-o" );
+            x.classList.add( "fa-heart" );
+        }
+    }
+</script>
+
+<br>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="receipe-slider owl-carousel">
+                        {% if receita.foto_receita == '' %}
+                            <img src="{% static 'img/bg-img/tomate_banner.jpg' %}">
+                        {% else %}
+                            <img src="{{ receita.foto_receita2.url }}" alt="" class= "imgReceita col-12">
+                        {% endif %} 
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Receipe Content Area -->
+        <div class="receipe-content-area">
+            <div class="container">
+
+                <div class="row">
+                    <div class="col-12 col-md-8">
+                        <div class="receipe-headline col-12">
+                            <span>{{ receita.data_receita }}</span>
+                            <form action="{% url 'like_receita' receita.id %}" method = "GET">
+                                {% csrf_token %}
+                                {% if user.is_authenticated%}
+                                    {% comment %} <h4>Curtir Receita</h4> {% endcomment %}
+                                    
+                                    {% if  liked  %}
+                                    <h2>{{receita.nome_receita}} <button title="Descurtir" id="receita_id" name="receita_id" value="{{ receita.id}}" type="submit" class="btn btn-secundary btn-sm"><i style="font-size: 30px; color:red;" class="fa fa-heart"></i></button> </h2>
+                                    {% else %}
+                                        <h2>{{receita.nome_receita}} <button title="Curtir" id="receita_id" name="receita_id" value="{{ receita.id}}" type="submit" class="btn btn-secundary  btn-sm"><i style="font-size: 30px;color:red;" class="fa fa-heart-o"></i></button> </h2>
+                                    {% endif %}
+                                {% else%}
+                                <h3> Efetue Login para poder curtir</h3>
+                                <li><a href="{% url 'login' %}">Login</a></li>
+                                {% endif%}
+                            </form>
+                            <div class="receipe-duration">
+                                <h6>Preparo: {{receita.tempo_preparo}}</h6>
+                                <h6>Rendimento: {{receita.rendimento}}</h6>
+                                <h6>Categoria: {{receita.categoria}}</h6>
+                                <h6>Por: {{ user.username }}</h6>
+                          <a href="#"> {{receita.categoria}}</a>
+
+                            </div>
+
+
+
+
+              {% if  receita.usuario == usuario_logado.usuario_id%}
+            <br>
+                    <a type="button" class="btn btn-outline-primary" href = "{% url 'EditarReceitaView' receita.id  %}"> Editar Receita</a>
+                    <a type="button" class="btn btn-outline-danger" href = "{% url 'DeletaReceitaView' receita.id  %}"> Deletar Receita</a>
+
+              {% endif %}
+
+                        </div>
+                    </div>
+
+                <div class="row">
+                    <div class="col-12 col-lg-8">
+                        <!-- Single Preparation Step -->
+                        <div class="single-preparation-step d-flex">
+                            <p>{{receita.modo_preparo}}</p>
+                        </div>
+                    </div>
+
+                    <!-- Ingredientes -->
+                </div>
+                <!-- Ingredientes -->
+            
+
+{% comment %} <form action="{% url 'like_receita' receita.id %}" method = "POST">
+            {% csrf_token %}
+        {% if user.is_authenticated%}
+            <h4>Curtir Receita</h4>
+            {% if  liked  %}
+               <p c><button type="submit", id= "receita_id", name="receita_id", value = "{{ receita.id}}", class="btn btn-secundary btn-sm"><i style="font-size: 30px; color:red;" class="fa fa-heart"></i></button>  
+            {% else %}
+                <button type="submit", id= "receita_id", name="receita_id", value = "{{ receita.id}}", class="btn btn-secundary  btn-sm"><i style="font-size: 30px;color:red;" class="fa fa-heart-o"></i></button>
+            {% endif %}
+        {% else%}
+          <h3> Efetue Login para poder curtir</h3>
+                                            <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif%}
+</form> {% endcomment %}
+
+{% comment %} <h5>Favoritar Receita</h5>
+<br>
+<i style="font-size: 50px;" onclick="favoritarReceita(this)" class="fa fa-heart-o" id="receita_id" name="receita_id" value="{{receita.id}}">Curtir</i> {% endcomment %}
+            
+
+<div class = "container">
+  <h2> Comentários</h2> 
+      <a href = "{% url 'AdicionarCommentView' receita.id %}">Adicionar comentário</a>
+
+      <br>
+      <br>
+      <br>
+  {% if not receita.comentarios.all %}
+      <p> Não há comentários para esta receita</p>
+      <a href = "{% url 'AdicionarCommentView' receita.id %}"
+      </br> </br>
+
+  {% else %}
+
+  {% for comentario in receita.comentarios.all %}
+    <div class="container-fluid">
+      <div class="roW">
+
+      <div class="media">
+      {% if usuario_logado.usuario_id == comentario.usuario%}
+
+        <img class="mr-2 col-2" src="{{usuario_logado.foto_usuario.url}}" alt="Generic placeholder image">
+    
+      {% endif %}
+     
+        <div class="media-body">
+
+          <h5 class="mt-2">{{comentario.usuario}}</h5>
+                                  <p class="card-text mb-auto">{{comentario.comentario}}</p>
+                                  <div class="mb-1 text-muted">Publicado em {{comentario.data_comentario}}</div>
+
+                        {% if user.is_authenticated %}
+
+                            {% if comentario.usuario == usuario_logado.usuario_id %}
+                              <a href= "{% url 'EditarCommentView' comentario.id %}" class = "btn btn-warning">  Editar comentário</a>
+                              <a href= "{% url 'RemoverCommentView' comentario.id%}" class = "btn btn-danger">  Apagar comentário</a>
+
+                              <a href= "{% url 'CadastrarDenunciaReceitaView' comentario.id %}" class = "btn btn-primary text-right">  Denunciar comentário</a>
+
+                            {% endif %}
+                        {% endif %}
+
+                </div>
+          </div>
+        {% endfor %}
+ 
+   </div>
+             </div>
+
+
+{% endif %}
+</div>
+
+c    {% include 'partials/footer.html' %}
+{% endblock %}
+
+

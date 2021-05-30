@@ -1,0 +1,161 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Preloader -->
+    {% include 'partials/menu.html' %}
+
+
+<!-- jQuery 1.8 or later, 33 KB -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- Fotorama from CDNJS, 19 KB -->
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+
+ <div class="fotorama" 
+     data-fit="cover" 
+     data-ratio="800/600"
+     data-minwidth="400"
+     data-minheight="300"
+     data-maxheight="15%"
+    data-clicktransition="slide">
+<img src="{% static 'img/bg-img/header1.jpg' %}">
+<img src="{% static 'img/bg-img/header2.jpg' %}">
+<img src="{% static 'img/bg-img/header3.jpg' %}">
+<img src="{% static 'img/bg-img/tomate_banner.jpg' %}">
+<img src="{% static 'img/bg-img/header4.jpg' %}">
+<img src="{% static 'img/bg-img/header5.jpg' %}">
+
+</div>
+
+<div class = "container-fluid">
+
+    <div class="row ">
+        <div class="col-12 align-self-start">
+             <div class="alert alert-success text-center col-xl-12">
+
+                {% if user.username%}
+                        Logado como  <strong>{{user.username}}</strong> 
+                    {% else %}
+                        <a href="{% url 'login' %}">Você não está logado no momento. Deseja efetuar Login?</a>
+                    {% endif %}
+             </div>
+        </div>
+       <hr>
+            <!--WCard-->
+            <div class ="col-12 align-self-end">
+                
+    <div class="team-clean">
+        <div class="container" >
+            <!-- Start: Intro -->
+            <div class="intro">
+                <h2 class="text-center title">Meu perfil </h2>
+                <hr>
+
+
+            </div>
+            <!-- End: Intro -->
+            <!-- Start: People -->
+            <div class="row people">
+                <div class="col-md-6 col-lg-4 col-xl-4 offset-xl-4 item"><img class=" rounded-circle img-responsive" src="{{usuario.foto_usuario.url}}">
+                   
+                    <h3 class="name">{{user.username}}</h3>
+                    <p class="title">{{usuario.categoria_chefe}}</p>
+                   <hr>
+
+                    <p class="card-text text-center">
+                        <b> Email:</b>              {{user.email}}                 </br>
+
+                        <b>Primeiro nome:</b>       {{user.first_name}}       </br>
+                        <b> Último nome:</b>        {{user.last_name}}       </br>
+                        <b> Nick: </b>              {{user.username}}               </br>
+                        <b> Usuário desde: </b>      {{usuario.dt_criacao}}     </br>
+                        <b> Total de avaliações:</b>   {{usuario.avaliacao.count}} 
+
+                   </p>
+               
+                    <!--Quotation-->
+                </div>
+                                           
+
+                </div>
+                <div class="text-center">
+                    <a type="button" class="btn btn-outline-primary" href = "{% url 'edit_profile_page' usuario.id%}"> Alterar Perfil</a>
+                    <a type="button" class="btn btn-outline-warning " href = "{% url 'PasswordsChangeView'%}"> Redefinir Senha</a>
+                    <a type="button" class="btn btn-outline-danger"  href = "{% url 'DeletaProfilePageView' user.id%}"> Deletar  Conta</a>
+                </div>
+                <Br>
+            </div>
+            <!-- End: People -->
+                
+        </div>
+
+
+
+    </div>
+</div>
+
+     <div class="col-12 alert alert-info text-center">Minhas Receitas</div>
+
+{% if receitas %}
+
+
+          <div class="col-xl-12 ">                  
+              <div class="cards column">
+            {% for receita in receitas %}
+  
+            <div class="card w-100  shadow">
+                <div class = "inner">
+                <img class="card-img-top imgGaleria" src={{receita.foto_receita.url}} alt="Imagem de capa do card">
+
+            </div>
+
+            <a href = {% url 'receita' receita.id  %}>
+                <div class="card-body">
+                <h6 align="center">{{receita.nome_receita}}</h6>
+                                <hr> 
+
+                <p class="card-text">
+
+                <b> Publicada por:</b>  {{receita.usuario}}    <br>
+                <b> Total de Curtidas:</b> {{receita.likes.count}} <br>
+                <b> Dificuldade:</b>    {{receita.dificuldade}} 
+                    <a type="button" class="btn btn-outline-warning" href = "{% url 'EditarReceitaView' receita.id  %}"> Editar</a>
+                    <a type="button" class="btn btn-outline-danger" href = "{% url 'DeletaReceitaView' receita.id  %}"> Remover</a>
+              <hr> 
+                 </p>
+              </a>
+
+              
+
+            <br>
+                        <br>
+
+                    <p align="center"class="card-text"><b class="text-center">Publicada em:</b> {{receita.data_receita}}</p> 
+
+
+            </div>
+        </div>
+                {% endfor %}
+      </div>
+{% else %}
+            <br><br>
+            </div>
+             <div class="alert alert-success text-center col-xl-8">
+                Não há receitas cadastradas no momento. Deseja cadastrar uma?
+             </div>
+                      <br>
+
+             <p align= "center">
+                    <a class="btn btn-outline-primary" href="{% url 'CriarReceita' %}">Cadastrar Receita</a> 
+                </p>
+            <br><br>
+            <br><br>
+
+
+{% endif %}
+
+
+    {% include 'partials/footer.html' %}
+
+{% endblock %}

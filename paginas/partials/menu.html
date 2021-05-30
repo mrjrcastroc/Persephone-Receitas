@@ -1,0 +1,84 @@
+{% load static %}
+<!-- ##### Header Area Start ##### -->
+
+
+
+    <div id="preloader">
+        <i class="circle-preloader"></i>
+        <img src="{% static 'img/core-img/pizza.png' %}" alt="">
+    </div>
+
+    <!-- Search Wrapper -->
+
+<nav class="navbar  navbar-expand-sm navbar-light bg-light">
+
+         <a class="nav-brand" href="{% url 'index' %}">
+         
+            <img class="col-10" src="{% static 'img/core-img/logo.png' %}" alt="">
+        </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse">☰</button> 
+
+    <div class="collapse navbar-collapse" id="navbar-collapse">
+        {% if user.is_authenticated %}
+
+        <ul class="nav navbar-nav ml-auto">
+
+            <li class="nav-item active"> <a class="nav-link" href="{% url 'index' %}"> Início</a>   </li>
+            <li class="nav-item "> <a class="nav-link" href="{% url 'perfil' %}">Perfil</a>   </li>
+            <li class="nav-item "> <a class="nav-link" href="{% url 'CriarReceita' %}">Cadastrar Receita</a>   </li>
+    
+
+          {% if user.is_superuser %}
+                    <li class="nav-item "> <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>   </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Denuncias</a>
+      
+
+                <div class="dropdown-menu dropdown-menu-right">
+
+                    <a class="dropdown-item" href="{% url 'CriarCategoriaDenunciaView' %}">Cadastro Categoria Denúncia</a>   
+                    <a class="dropdown-item" href="{% url 'CategoriaDenunciasListView' %}">Listar Categoria de Denúncias</a>
+                    <a class="dropdown-item" href="{% url 'ListarDenunciasListView' %}">Visualizar Denúncias</a>
+
+                </div>
+            </li>
+            {% endif %}
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Rankings</a>
+                <div class="dropdown-menu dropdown-menu-right">
+ 
+                    <a class="dropdown-item" href="{% url 'ranking_chefe'   %}">Rankings de Chefe  </a>   
+                    <a class="dropdown-item" href="{% url 'ranking_receita' %}">Rankings de Receitas</a>
+
+
+                </div>
+            </li>
+
+            <li class="nav-item "> <a class="nav-link" href="{% url 'logout' %}">Logout</a>   </li>
+
+
+        {% else %}
+        <ul class="nav navbar-nav ml-auto">
+
+                                    <li><a class="dropdown-item" href="{% url 'index' %}">Início</a></li>
+                                    <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+
+                                    <li><a class="dropdown-item" href="{% url 'cadastro_usuario' %}">Cadastrar-se</a></li>
+
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Rankings</a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                        
+                                            <a class="dropdown-item" href="{% url 'ranking_chefe'   %}">Rankings de Chefe  </a>   
+                                            <a class="dropdown-item" href="{% url 'ranking_receita' %}">Rankings de Receitas</a>
+
+
+                                        </div>
+                                    </li>
+        {% endif %}
+
+        </ul>
+    </div>
+</nav>

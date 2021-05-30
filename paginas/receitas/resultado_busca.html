@@ -1,0 +1,124 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Preloader -->
+    {% include 'partials/menu.html' %}
+
+
+<!-- jQuery 1.8 or later, 33 KB -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- Fotorama from CDNJS, 19 KB -->
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+
+ <div class="fotorama" 
+     data-fit="cover" 
+     data-ratio="800/600"
+     data-minwidth="400"
+     data-minheight="300"
+     data-maxheight="15%"
+    data-clicktransition="slide">
+<img src="{% static 'img/bg-img/header1.jpg' %}">
+<img src="{% static 'img/bg-img/header2.jpg' %}">
+<img src="{% static 'img/bg-img/header3.jpg' %}">
+<img src="{% static 'img/bg-img/tomate_banner.jpg' %}">
+<img src="{% static 'img/bg-img/header4.jpg' %}">
+<img src="{% static 'img/bg-img/header5.jpg' %}">
+
+</div>
+
+
+
+<div class = "container">
+    <div class="row ">
+        <div class="col-12 align-self-start">
+             <div class="alert alert-success text-center col-xl-12">
+
+                {% if user.username%}
+                        Logado como  <strong>{{user.username}}</strong> 
+                    {% else %}
+                        <a href="{% url 'login' %}">Você não está logado no momento. Deseja efetuar Login?</a>
+                    {% endif %}
+             </div>
+        </div>
+
+        <div class="col-12 align-items-end">
+          <nav class="navbar flex-md-2 p-0">
+              <form class="form-inline " action= "{% url 'buscar' %}">
+                 
+                  <input class="form-control" style="width:413px !important;" name = "buscar" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+                  <button class="btn btn-outline-info" style="margin-left:10px;" title="Pesquisar" type="submit"><i class="fa fa-search"></i></button>
+                  </br>    
+                  </br>
+              </form>
+          </nav>
+        </div>
+      {% if receitas %}
+      <div class="col-12 w-50">
+      <br><br>
+        <h5 align = "center" > Encontramos as receitas abaixo </h5>
+        <hr>
+         </div>
+          <div class="col-8 align-self-end  mr-auto">                  
+
+              <div class="cards column">
+            {% for receita in receitas %}
+  
+            <div class="card w-100 h-100 shadow">
+                <div class = "inner">
+                <img class="card-img-top imgGaleria" src={{receita.foto_receita.url}} alt="Imagem de capa do card">
+
+            </div>
+
+            <a href = {% url 'receita' receita.id  %}>
+                <div class="card-body">
+                <h7 class="text-center">{{receita.nome_receita}}</h7>
+                <hr> 
+
+                <p class="card-text">
+
+                <b> Publicada por:</b>   {{receita.usuario}}     <br>
+                <b> Dificuldade:  </b>   {{receita.dificuldade}} <br> 
+                <b> Categoria:    </b>   {{receita.categoria}}   <br>
+
+                <b> Curtidas:</b>        {{receita.likes.count}}           <br>
+                <b> Comentarios:</b>     {{receita.comentarios.all.count}} <br>
+
+                   <hr> 
+                 </p>
+              </a>
+
+            {% if user  == receita.usuario%}
+
+                <div class="alert alert-info text-center">Esta receita foi publicada por mim </div>
+
+            {% endif %}
+            <br>
+                        <br>
+
+                    <p align="center"class="card-text"><b class="text-center">Publicada em:</b> {{receita.data_receita}}</p> 
+
+            </div>
+        </div>
+                {% endfor %}
+            
+        {% else %}
+              
+              <br>
+              <br>
+                    <div style = "margin-top:5%" class="col-12">                  
+                        <div class="alert alert-danger text-center col-xl-12"> <b> Não há nenhuma receita com o nome informado </b></div>
+
+
+                </div>
+
+
+    {% endif %}
+
+
+      </div>
+</div>
+
+    {% include 'partials/footer.html' %}
+{% endblock %}

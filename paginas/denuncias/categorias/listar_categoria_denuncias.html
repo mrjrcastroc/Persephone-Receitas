@@ -1,0 +1,69 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Preloader -->
+    {% include 'partials/menu.html' %}
+
+<div class="alert alert-success text-center">
+  <strong>Estas são as categorias de denúncia cadatradas</strong> </div>
+              <!--Card-->
+  </div>
+
+<div class="col-sm-12">
+        <div>
+    {% include 'partials/tabela_ranking_receita.html' %}
+            
+<div class="container">
+	
+    <div class="row">
+        <div class="col-md-12">
+            <form action="#" method="get">
+                <div class="input-group">
+                    <input class="form-control" id="system-search" name="q" placeholder="Procurar..." required>
+                </div>
+            </form>
+            <br><br>
+        </div>
+        
+		<div class="col-xl-12">
+    	 <table class="table table-list-search">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Descrição</th>
+                        <th>Ação</th>
+                        <th>Data Categoria</th>
+                        <th>Categoria Ativa</th>
+                        <th>Opções</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+        {% if categoria_denuncia %}
+                {% for categoria_denuncias in categoria_denuncia %}
+                                <tr>  
+                            <td><a href="{% url 'EditarCategoriaDenunciaView' categoria_denuncias.id%}">{{categoria_denuncias.titulo}}</a></td>
+                            <td>{{categoria_denuncias.descricao}}</td>
+                            <td>{{categoria_denuncias.acao}}</td>
+                            <td>{{categoria_denuncias.data_categoria}}</td>
+                            <td>{{categoria_denuncias.ativa}}</td>
+                            <td> <a type="button" href = "{% url 'EditarCategoriaDenunciaView' categoria_denuncias.id%}" class="btn btn-outline-warning text-right"> Editar</a>
+                                 <a type="button" href = "{% url 'RemoverCategoriaDenunciaView' categoria_denuncias.id%}" class="btn btn-outline-danger text-left" > Remover</a>
+                            </td>
+                    {% endfor %}
+
+        {% endif %}
+                    </tr>
+                </tbody>
+            </table>   
+		</div>
+	</div>
+</div>
+            <br><br>
+
+
+
+
+    {% include 'partials/footer.html' %}
+
+{% endblock %}

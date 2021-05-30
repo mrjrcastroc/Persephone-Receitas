@@ -1,0 +1,102 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Preloader -->
+    {% include 'partials/menu.html' %}
+
+
+<!-- jQuery 1.8 or later, 33 KB -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- Fotorama from CDNJS, 19 KB -->
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+
+ <div class="fotorama" 
+     data-fit="cover" 
+     data-ratio="800/600"
+     data-minwidth="400"
+     data-minheight="300"
+     data-maxheight="15%"
+    data-clicktransition="slide">
+<img src="{% static 'img/bg-img/header1.jpg' %}">
+<img src="{% static 'img/bg-img/header2.jpg' %}">
+<img src="{% static 'img/bg-img/header3.jpg' %}">
+<img src="{% static 'img/bg-img/tomate_banner.jpg' %}">
+<img src="{% static 'img/bg-img/header4.jpg' %}">
+<img src="{% static 'img/bg-img/header5.jpg' %}">
+
+</div>
+<div class="alert alert-success text-center">
+  <strong>Ranking de Receitas</strong> </div>
+              <!--Card-->
+  </div>
+<div class="col-sm-12">
+        <div>
+    {% include 'partials/tabela_ranking_receita.html' %}
+            
+<div class="container">
+	
+    <div class="row">
+        <div class="col-md-12">
+            <form action="#" method="get">
+                <div class="input-group">
+                    <input class="form-control" id="system-search" name="q" placeholder="Procurar..." required>
+                </div>
+            </form>
+            <br><br>
+        </div>
+        
+		<div class="col-xl-12">
+<table class="table table-list-search">
+                <thead>
+                    <tr>
+                        <th>Posicão no Ranking</th>
+                        <th>Nome da Receita</th>
+                        <th>Chefe</th>
+                        <th>Data Receita </th>
+                        <th>Total de Curtidas</th>
+                        <th>Total de Comentários</th>
+                        <th>Total de Interações</th>
+ 
+                    </tr>
+                </thead>
+                <tbody>
+                {% if receitas %}
+
+                    {% for receita in receitas%}
+
+                        {% if receita.likes.count > 0%}
+
+                        <tr>  
+
+                            <td><b>{{forloop.counter }}</b></td>
+                            <td><a href="{% url 'receita' receita.id%}">{{receita.nome_receita}}</a></td>
+                            <td><b>{{receita.usuario}}</b></td>
+                            <td><b>{{receita.data_receita}}</b></td>
+                            <td><b>{{receita.likes.count}}</b></td>
+                            <td><b>{{receita.comentarios.count}}</b></td>
+                            <td><b>{{receita.likes.count|add:receita.comentarios.count}}</b></td>
+
+                        {% endif %}
+                    {% endfor %}
+
+                {% endif %}
+                    </tr>
+                </tbody>
+            </table>   
+				</div>
+	</div>
+</div>
+            <br><br>
+
+
+
+
+            <a href="{% url 'index' %}"><button type="button" class="btn btn-secondary">Início</button></a>
+        </div>
+    </div>
+</div>
+    {% include 'partials/footer.html' %}
+
+{% endblock %}

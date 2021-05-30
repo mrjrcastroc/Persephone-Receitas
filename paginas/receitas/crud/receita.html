@@ -1,0 +1,332 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+   
+    {% include 'partials/menu.html' %}
+ 
+{% if user.is_authenticated%}
+   <div class="alert alert-success text-center">Logado como
+  <strong>{{user.username}}</strong> </div>
+{% endif %}
+
+<!-- jQuery 1.8 or later, 33 KB -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- Fotorama from CDNJS, 19 KB -->
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+
+<!--
+   data-width="100%"
+     data-ratio="800/600"
+     data-minwidth="400"
+     data-maxwidth="1000"
+     data-minheight="300"
+     data-maxheight="100%"> -->
+<div class="fotorama" 
+        data-fit="cover" 
+        data-allowfullscreen="true"  
+        data-ratio="800/600"
+        data-minwidth="400"
+        data-minheight="300"
+        data-maxheight="15%"
+        data-clicktransition="slide">
+    <img src="{{receita.foto_receita.url}}">
+    <img src="{{receita.foto_receita2.url}}">
+    <img src="{{receita.foto_receita3.url}}">
+
+</div>
+
+<body class="text-body">
+
+    <!-- Start: Simple Slider -->
+     <!-- Start: Article Dual Column -->
+    <div class="text-dark article-dual-column">
+        <div class="container">
+
+    {% if  receita.receita_denuncia.all %}
+
+        <div class="alert alert-danger text-center"><strong>Esta receita possui {{receita.receita_denuncia.all.count}} denuncias </strong></div>
+        
+        <a class="btn btn-primary  btn-sm text-center" href="{% url 'visualizar_denuncia' receita.id %}">Visualizar</a>
+
+    {% endif %}
+
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <!-- Start: Intro -->
+                    <div class="intro">
+                       
+                            <form action="{% url 'like_receita' receita.id %}" method = "GET">
+                                {% csrf_token %}
+                                {% if user.is_authenticated%}
+                                    {% comment %} <h4>Curtir Receita</h4> {% endcomment %}
+                                    
+                                    {% if  liked  %}
+                                    <h1 class="text-center">{{receita.nome_receita}} <button title="Descurtir" style="background-color:transparent; overflow:hidden;" id="receita_id" name="receita_id" value="{{ receita.id}}" type="submit" class="btn btn-secundary btn-sm"><i style="font-size: 30px; color:red;" class="fa fa-heart"></i></button> </h1>
+
+                                    {% else %}
+                                    <h1 class="text-center">{{receita.nome_receita}} <button title="Curtir" style="background-color:transparent; overflow:hidden;" id="receita_id" name="receita_id" value="{{ receita.id}}" type="submit" class="btn btn-secundary  btn-sm"><i style="font-size: 30px;color:red;" class="fa fa-heart-o"></i></button> </h1>
+                                    {% endif %}
+                                {% else%}
+                                <h1 class="text-center">{{receita.nome_receita}} </h1>
+                                <p align="center"> Efetue Login para poder curtir
+                                <br>
+                                <a class="btn btn-secundary  btn-sm text-center" href="{% url 'login' %}">Login</a>
+                               
+                                {% endif%}
+                                </p>
+                            </form>
+
+
+
+
+
+                        <!-- Start: Date and Author -->
+                        <p class="text-center"><span class="by">Por</span> <a href="#">{{receita.usuario}}</a><span class="date">{{ receita.data_receita }}</span></p>
+                        <!-- End: Date and Author -->
+                    </div>
+                    <!-- End: Intro -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-10 col-lg-7 offset-md-1 offset-lg-0 offset-xl-3" style="background-color: #f9f9f9;">
+                    <!-- Start: Text -->
+                    <div class="text textoWordBreak">
+                  
+                        <h2>Descrição </h2>
+                            <p>{{receita.descricao}}
+                            </p>
+                    
+                        <h2>Ingredientes</h2>
+                            <p>
+                                {{receita.ingredientes}}
+                            </p>
+                    
+                        <h2>Modo Preparo </h2>
+                            <p> <strong>Ut vehicula rhoncus</strong>
+                                {{receita.modo_preparo}}
+                            </p>
+                            
+                  </div>
+                    <!-- End: Text -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </Br></Br></Br>
+    <!-- End: Article Dual Column -->
+    <!-- Start: Features Boxed -->
+    <div class="features-boxed">
+        <div class="container" style="background-color: transparent;">
+            <!-- Start: Intro -->
+            <div class="intro">
+                <h2 class="text-center">Informações adicionais </h2>
+                <hr>
+            </div>
+            <!-- End: Intro -->
+            <!-- Start: Features -->
+            <div class="row justify-content-center features">
+                <div class="col-sm-6 col-md-5 col-lg-4 item">
+                    <div class="box"><i class="fa fa-money icon"></i>
+                        <h3 class="name">Valor Estimado</h3>
+                            <p class="description">{{receita.valor_estimado}} </p>
+               
+                        
+                        </div>
+                </div>
+                <div class="col-sm-6 col-md-5 col-lg-4 item">
+                    <div class="box"><i class="fa fa-clock-o icon"></i>
+                        <h3 class="name">Tempo de Preparo</h3>
+                             <p class="description">{{receita.tempo_preparo}} </p>
+       
+                        
+                        </div>
+                </div>
+                <div class="col-sm-6 col-md-5 col-lg-4 item">
+                    <div class="box"><i class="fa fa-list-alt icon"></i>
+                        <h3 class="name">Categoria </h3>
+                            <p class="description">{{receita.categoria}} </p>
+                       
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-5 col-lg-4 item">
+                    <div class="box"><i class="fa fa-level-up icon"></i>
+                        <h3 class="name">Dificuldade </h3>
+                            <p class="description">{{receita.dificuldade}} </p>
+
+                        
+                        </div>
+                </div>
+
+            <div class="col-sm-6 col-md-5 col-lg-4 item">
+                    <div class="box"><i class="fa fa-cutlery icon"></i>
+                        <h3 class="name">Rendimento </h3>
+                         <p class="description">{{receita.rendimento}} </p>
+
+                        
+                        </div>
+                </div>
+
+          <div class="col-sm-6 col-md-5 col-lg-4 item">
+                    <div class="box"><i class="fa fa-thumbs-up icon"></i>
+                        <h3 class="name">Total de Likes  </h3>
+                        <p class="description">{{likes}} </p>
+                        
+                    </div>
+           </div>
+
+
+            </div>
+            <!-- End: Features -->
+        </div>
+    </div>
+    <!-- End: Features Boxed -->
+    <!-- Start: Team Clean -->
+    <div class="team-clean">
+        <div class="container" >
+            <!-- Start: Intro -->
+            <div class="intro">
+                <h2 class="text-center title">Chefe da Receita </h2>
+                <hr>
+
+
+            </div>
+            <!-- End: Intro -->
+            <!-- Start: People -->
+            <div class="row people">
+                <div class="col-md-6 col-lg-4 col-xl-4 offset-xl-4 item"><img class=" rounded-circle img-responsive" src="{{usuario.foto_usuario.url}}">
+                  
+                    <form action="{% url 'avaliacao_chefe' receita.id %}" method = "GET">
+                        {% csrf_token %}
+                                {% if user.is_authenticated%}
+                                    {% comment %} <h4>Curtir Receita</h4> {% endcomment %}
+                                    
+                                    {% if  avaliado  %}
+                                        <h3 class="name">{{user.username}}
+                                            <button title="Descurtir" style="background-color:transparent; overflow:hidden;"
+                                         id="user_id" name="user_id" value="{{ user.id}}"
+                                          type="submit" class="btn btn-secundary btn-sm"><i style="font-size: 30px; color:red;" class="fa fa-heart"></i></button> </h3>
+
+                                    {% else %}
+                                             <h3 class="name">{{user.username}}
+                                             <button title="Curtir" style="background-color:transparent; overflow:hidden;" id="user_id" name="user_id" value="{{ user.id}}" type="submit" class="btn btn-secundary  btn-sm"><i style="font-size: 30px;color:red;" class="fa fa-heart-o"></i></button> </h3>
+                                    {% endif %}
+
+                                {% else%}
+                                    <p align="center"> Efetue Login para poder curtir
+                                    <br>
+                                    <a class="btn btn-secundary  btn-sm text-center" href="{% url 'login' %}">Login</a>
+                                
+                                {% endif%}
+
+                                </p>
+                            </form>
+
+                  
+                    <p class="title">       {{usuario.categoria_chefe}} </p>
+                    <p class="description"> {{usuario.descricao}}       </p>
+           
+                    <p class="description"> Avaliações do chefe {{usuario.avaliacao.count}} </p>
+
+                          
+           
+                </div>
+            </div>
+            <!-- End: People -->
+        </div>
+    </div>
+</div>
+</div>
+</div>
+    <!-- End: Team Clean -->
+    <!-- Start: Testimonials -->
+    <p align="center">
+      <a href = "{% url 'CadastrarDenunciaReceitaView' receita.id  %}" class="btn btn-danger">
+      Denunciar Receita
+      </a>
+
+    </p>
+    
+
+<div class="container-fluid" style="background:#eef4f7; padding-top:30px; padding-bottom:40px;">
+ <div class="container bootstrap snippets bootdey ">
+    <div class="row">
+    
+        <div class="panel panel-default widget">
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-comment"></span>
+                <h3 class="panel-title">Comentários</h3>
+
+
+            <a href = "{% url 'AdicionarCommentView' receita.id %}" class="btn btn-success">
+                <span class="label label-info">Adicionar comentário</span>
+            </a>
+            </div>
+
+
+    {% if not receita.comentarios.all %}
+  
+      <p> Não há comentários para esta receita</p>
+      <a href = "{% url 'AdicionarCommentView' receita.id %}"
+
+
+    {% else %}
+    
+            <div class="panel-body">
+
+                <ul class="list-group">
+    
+    {% for comentario in receita.comentarios.all %}
+
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-xs-2 col-md-1">
+                    {% if usuario_logado.usuario_id == comentario.usuario%}
+
+                                <img src="{{usuario_logado.foto_usuario.url}}" class=" mr-4 img-responsive" alt="" /></div>
+                    {% endif %}
+                            <div class="col-xs-10 col-md-11">
+                                <div>
+                                    <a href="#">
+                                        {{comentario.titulo}}
+                                    </a>
+                                    <div class="mic-info">
+                                        By: <a href="#">{{comentario.usuario}}</a> on 2 Aug 2013
+                                    </div>
+                                </div>
+                                <div class="comment-text">
+                                    {{comentario.comentario}}
+                                </div>
+                                <div class="action">
+                                {% if user.is_authenticated %}
+                                
+                                    {% if comentario.usuario == usuario_logado.usuario_id %}
+
+                                        <a href= "{% url 'EditarCommentView' comentario.id %}" class = "btn btn-warning">  Editar comentário</a>
+                                        <a href= "{% url 'RemoverCommentView' comentario.id%}" class = "btn btn-danger">  Apagar comentário</a>
+                                    {% endif %}
+
+                                        <a href= "{% url 'CadastrarDenunciaReceitaView' comentario.id %}" class = "btn btn-primary text-right">  Denunciar comentário</a>
+                                {%endif%}
+
+                                
+                                
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+     {% endfor%}
+
+{% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+    {% include 'partials/footer.html' %}
+{% endblock %}

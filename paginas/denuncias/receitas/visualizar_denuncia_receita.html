@@ -1,0 +1,140 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+   
+    {% include 'partials/menu.html' %}
+ 
+{% if user.is_authenticated%}
+   <div class="alert alert-success text-center">Logado como
+  <strong>{{user.username}}</strong> </div>
+{% endif %}
+
+<!-- jQuery 1.8 or later, 33 KB -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- Fotorama from CDNJS, 19 KB -->
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+
+
+<div class="fotorama" 
+     data-fit="cover" 
+     data-allowfullscreen="true"  
+     data-ratio="800/600"
+     data-minwidth="400"
+     data-minheight="300"
+     data-maxheight="15%"
+    data-clicktransition="slide">
+  <img src="{{receita.foto_receita.url}}">
+  <img src="{{receita.foto_receita2.url}}">
+  <img src="{{receita.foto_receita3.url}}">
+
+</div>
+<body class="text-body">
+
+    <!-- Start: Simple Slider -->
+     <!-- Start: Article Dual Column -->
+<div class="text-dark article-dual-column">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-10 offset-md-1">
+                <div class="intro">
+                       
+                    <form action="{% url 'like_receita' receita.id %}" method = "GET">
+                        {% csrf_token %}
+                        {% if user.is_authenticated%}
+                            {% comment %} <h4>Curtir Receita</h4> {% endcomment %}
+                            
+                            {% if  liked  %}
+                                <h1 class="text-center">{{receita.nome_receita}} <button title="Descurtir" style="background-color:transparent; overflow:hidden;" id="receita_id" name="receita_id" value="{{ receita.id}}" type="submit" class="btn btn-secundary btn-sm"><i style="font-size: 30px; color:red;" class="fa fa-heart"></i></button> </h1>
+                                {% else %}
+                                    <h1 class="text-center">{{receita.nome_receita}} <button title="Curtir" style="background-color:transparent; overflow:hidden;" id="receita_id" name="receita_id" value="{{ receita.id}}" type="submit" class="btn btn-secundary  btn-sm"><i style="font-size: 30px;color:red;" class="fa fa-heart-o"></i></button> </h1>
+                            {% endif %}
+                        {% else%}
+                            <h1 class="text-center">{{receita.nome_receita}} </h1>
+                            <p align="center"> Efetue Login para poder curtir <br>
+                                <a class="btn btn-secundary  btn-sm text-center" href="{% url 'login' %}">Login</a>
+                            </p>
+                                
+                        {% endif%}
+                    </form>
+                        <!-- Start: Date and Author -->
+                        <p class="text-center"><span class="by">Por</span> <a href="#">{{receita.usuario}}</a><span class="date">{{ receita.data_receita }}</span></p>
+                        <!-- End: Date and Author -->
+                </div>
+            </div>
+        </div>
+         <br>
+             <div class="row">
+                <div class="col-md-10 col-lg-7 offset-md-1 offset-lg-0 offset-xl-3" style="background-color: #f9f9f9;">
+                    <!-- Start: Text -->
+                    <div class="text textoWordBreak">
+                        <h2>Descrição </h2>
+                        <p>{{receita.descricao}}</p>
+                    
+                        <h2>Ingredientes</h2>
+                        <p>{{receita.ingredientes}}</p>
+                    
+                        <h2>Modo Preparo </h2>
+                        <p> <strong>{{receita.modo_preparo}}</strong></p>       
+                  </div>
+
+                </div>
+              </div>
+    </div>
+</div>
+
+<Br> <Br> <Br><Br>
+
+<div class="container">
+<div class="col-8 content-center">
+
+    	 <table class="table table-list-search">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Descrição</th>
+                        <th>Categoria Denúncia</th>
+                        <th>Data </th>
+                        <th>Categoria Ativa</th>
+                        <th>Opções</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+        
+
+    {% if  receita.receita_denuncia.all %}
+        {% for denuncia in  receita.receita_denuncia.all%}
+                        <tr>  
+                            <td>{{denuncia.texto}}</td>
+                            <td>{{denuncia.categoria_denuncia}}</td>
+                            <td>{{denuncia.comentario}}</td>
+                            <td>{{denuncia.ativa}}</td>
+                            <td>
+                                <a type="button" href = "{% url 'receita' receita.id%}" class="btn-sm btn-outline-info text-right"> 
+                                   Visualizar Receita </a>
+                            
+                            </td>            
+                            </td>
+                            <td> <a type="button" class="btn btn-outline-danger" href = "{% url 'DeletaReceitaView' receita.id  %}"> Deletar receita</a> </td>
+                            <td>  <a type="button" class="btn btn-outline-danger" href = "{% url 'DeletaProfilePageView' user.id%}"> Deletar conta</a> </td>
+                            <td> <a type="button" href = "{% url 'ResolverDenunciaReceitaView' denuncia.id%}" class="btn-sm btn-outline-info text-right"> Atualizar Denuncia</a>
+
+
+
+        {% endfor %}
+   
+    {% endif %}
+
+
+
+
+
+
+</div>
+
+    {% include 'partials/footer.html' %}
+
+{% endblock %}

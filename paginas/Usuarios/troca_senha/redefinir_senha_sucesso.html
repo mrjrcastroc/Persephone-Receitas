@@ -1,0 +1,33 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+{% load crispy_forms_tags %}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+
+<div class="sidenav">
+    <div class="login-main-text">
+        <p align="center">
+            <img src="{% static 'img/core-img/large_logo.png' %}" alt="Avatar" width="350px" class="profile-img">
+            <h2 align="center" style="font-size: 50px;">Efetuar Cadastro</h2>
+        </p>
+    </div>
+</div>
+<div class="main">
+    <div class="col-md-6 col-lg-8">
+        <div style="margin-top:20%;">
+        <h3 class= 'text-center'> Cadastrar Usuário </h3>
+        <hr>
+                        {% include 'partials/_alertas.html'%}
+
+
+
+{% load widget_tweaks%}
+
+        
+        <h2> alterada com sucesso</h2>
+    {% include 'partials/footer.html' %}
+
+{% endblock %}

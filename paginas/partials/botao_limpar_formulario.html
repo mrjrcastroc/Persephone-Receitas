@@ -1,0 +1,14 @@
+{% load static %}
+<button type="button" onclick="LimparFormulario()" class="btn btn-secondary">Limpar Formulário</button>
+
+<script>
+    function LimparFormulario() {
+        var i;
+        var elements_inputs = document.getElementsByTagName("input");
+        var elements_textareas = document.getElementsByTagName("form");
+        for(i = 0; i < elements_textareas.length; i++){
+            elements_textareas[i].value = ""
+        }
+
+    }
+</script>

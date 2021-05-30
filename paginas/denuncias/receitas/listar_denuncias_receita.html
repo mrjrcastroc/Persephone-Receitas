@@ -1,0 +1,70 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Preloader -->
+    {% include 'partials/menu.html' %}
+
+<div class="alert alert-info text-center">
+  <strong>Estas são as denúncias cadatradas</strong> </div>
+              <!--Card-->
+  </div>
+
+<div class="col-sm-12">
+        <div>
+    {% include 'partials/tabela_ranking_receita.html' %}
+            
+<div class="container">
+	
+    <div class="row">
+        <div class="col-md-12">
+            <form action="#" method="get">
+                <div class="input-group">
+                    <input class="form-control" id="system-search" name="q" placeholder="Procurar..." required>
+                </div>
+            </form>
+            <br><br>
+        </div>
+        
+		<div class="col-xl-12">
+    	 <table class="table table-list-search">
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Descrição</th>
+                        <th>Categoria Denúncia</th>
+                        <th>Data </th>
+                        <th>Categoria Ativa</th>
+                        <th>Opções</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+        {% if denuncias_receita %}
+                {% for denuncias_receita in denuncias_receita %}
+                                <tr>  
+                            <td><a href="{% url 'ResolverDenunciaReceitaView' denuncias_receita.id%}">{{denuncias_receita.titulo}}</a></td>
+                            <td>{{denuncias_receita.texto}}</td>
+                            <td>{{denuncias_receita.categoria_denuncia}}</td>
+                            <td>{{denuncias_receita.data_categoria}}</td>
+                            <td>{{denuncias_receita.ativa}}</td>
+                            <td> <a type="button" title="Atualizar Denuncia" href = "{% url 'ResolverDenunciaReceitaView' denuncias_receita.id%}" class="btn-sm btn-outline-info text-right"><i class="fa fa-refresh"></i></a>
+                                 <a type="button" title="Deletar Receita" href = "{% url 'ResolverDenunciaReceitaView' denuncias_receita.id%}" class="btn-sm btn-outline-danger text-right"><i class="fa fa-book"></i></a>
+                                 <a type="button" title="Deletar Usuário" href = "{% url 'ResolverDenunciaReceitaView' denuncias_receita.id%}" class="btn-sm btn-outline-danger text-right"><i class="fa fa-user-times"></i></a>
+                            </td>
+                    {% endfor %}
+
+        {% endif %}
+                    </tr>
+                </tbody>
+            </table>   
+		</div>
+	</div>
+</div>
+            <br><br>
+
+
+
+
+    {% include 'partials/footer.html' %}
+
+{% endblock %}

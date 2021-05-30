@@ -1,0 +1,195 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+    <!-- Preloader -->
+    {% include 'partials/menu.html' %}
+
+
+<!-- jQuery 1.8 or later, 33 KB -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- Fotorama from CDNJS, 19 KB -->
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.js"></script>
+
+ <div class="fotorama" 
+     data-fit="cover" 
+     data-ratio="800/600"
+     data-minwidth="400"
+     data-minheight="300"
+     data-maxheight="15%"
+    data-clicktransition="slide">
+<img src="{% static 'img/bg-img/header1.jpg' %}">
+<img src="{% static 'img/bg-img/header2.jpg' %}">
+<img src="{% static 'img/bg-img/header3.jpg' %}">
+<img src="{% static 'img/bg-img/tomate_banner.jpg' %}">
+<img src="{% static 'img/bg-img/header4.jpg' %}">
+<img src="{% static 'img/bg-img/header5.jpg' %}">
+
+</div>
+
+<div class = "container-fluid">
+    <div class="row ">
+        <div class="col-12 align-self-start">
+             <div class="alert alert-success text-center col-xl-12">
+
+                {% if user.username%}
+                        Logado como  <strong>{{user.username}}</strong> 
+                    {% else %}
+                        <a href="{% url 'login' %}">Você não está logado no momento. Deseja efetuar Login?</a>
+                    {% endif %}
+             </div>
+        </div>
+
+        <div class="col-12 align-items-end">
+          <nav class="navbar flex-md-2 p-0">
+              <form class="form-inline " action= "{% url 'buscar' %}">
+                 
+                  <input class="form-control" style="width:413px !important;" name = "buscar" type="search" placeholder="Pesquisar" aria-label="Pesquisar">
+                  <button class="btn btn-outline-info" style="margin-left:10px;" title="Pesquisar" type="submit"><i class="fa fa-search"></i></button>
+                  </br>    
+                  </br>
+              </form>
+          </nav>
+        </div>
+
+
+{% load widget_tweaks%}
+
+        <div class="col  align-self-start">
+            <div class="sidebar-sticky">
+            <hr>
+              <h4 style="padding-bottom: 11px;"> <small><b>Filtrar</b></small></h4>
+
+                <form method = "get">
+                    </hr>
+                    {% for field in filtros.form %}
+                        <ul class="nav flex-column">
+
+                        <li class="nav-item">
+                                    <label for="{{field.id_for_label}}">{{field.label}}</label>
+                                    {{field|add_class:'form-control'}}
+                                </li>
+                    {% endfor %}
+                        </ul>
+                    <br>
+                  <button class="btn btn-primary" type="submit"> Filtrar </button> 
+                </form>
+             </div>
+        </div>
+
+      {% if receitas %}
+          <div class="col-8 align-self-end  mr-auto">                  
+              <div class="cards column">
+            {% for receita in receitas %}
+  
+            <div class="card w-100 h-100 shadow">
+                <div class = "inner">
+                <img class="card-img-top imgGaleria" src={{receita.foto_receita.url}} alt="Imagem de capa do card">
+
+            </div>
+
+            <a href = {% url 'receita' receita.id  %}>
+                <div class="card-body">
+                <h7 class="text-center">{{receita.nome_receita}}</h7>
+                <hr> 
+
+                <p class="card-text">
+
+                <b> Publicada por:</b>  {{receita.usuario}}     <br>
+                <b> Dificuldade:</b>    {{receita.dificuldade}} <br> 
+                <b> Categoria:</b>    {{receita.categoria}}     <br>
+
+                <b> Curtidas:</b> {{receita.likes.count}} <br>
+                <b> Comentarios:</b> {{receita.comentarios.all.count}} <br>
+
+                   <hr> 
+                 </p>
+              </a>
+
+            {% if user  == receita.usuario%}
+              
+
+                <div class="alert alert-info text-center">Esta receita foi publicada por mim </div>
+
+            {% endif %}
+            <br>
+                        <br>
+
+                    <p align="center"class="card-text"><b class="text-center">Publicada em:</b> {{receita.data_receita}}</p> 
+
+            </div>
+        </div>
+                {% endfor %}
+            
+        {% else %}
+                    <div style = "padding-bottom:90%" class="col-8 align-self-end  mr-auto">                  
+                        <div class="alert alert-danger text-center col-xl-12"> <b> Não há nenhuma receita com os filtros selecionados </b></div>
+
+
+                </div>
+
+
+    {% endif %}
+
+
+      </div>
+
+
+
+ 
+  <div class="pagination" style="padding-bottom:25px;margin-left: 44.1%; margin-top:5%">
+      
+    <!-- ##### Pagination ##### -->
+            {% if receitas.has_other_pages %}
+            <ul class="pagination">
+                {% if receitas.has_previous %}
+                <li class="page-item">
+                    <a href="?page={{ receitas.previous_page_number }}" class="page-link">&laquo;</a>
+                </li>
+
+                {% else %}
+                
+                <li class="page-item disabled">
+                    <a class="page-link">&laquo;</a>
+                </li>
+                
+            {% endif %}
+            
+            {% for pagina in receitas.paginator.page_range %}
+
+            {% if receitas.number == pagina %}
+
+                <li class="page-item active">
+                    <a class="page-link">{{pagina}}</a>
+                </li>
+            {% else %}
+                
+                <li class="page-item">
+                    <a href="?page={{pagina}}" class="page-link">{{pagina}}</a>
+                </li>
+            
+            {% endif %}
+           
+            {% endfor %}
+                
+            {% if receitas.has_next %}
+
+                <li class="page-item">
+                    <a href="?page={{ receitas.next_page_number}}" class="page-link">&raquo;</a>
+
+                </li>
+            {% else %}
+
+                <li class="page-item disabled">
+                    <a class="page-link">&raquo;</a>
+                </li>
+            {% endif %}    
+            </ul>
+        {% endif %}
+        </div>
+  </div>
+   </div>
+ 
+    {% include 'partials/footer.html' %}
+{% endblock %}
